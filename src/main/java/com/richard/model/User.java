@@ -22,7 +22,7 @@ public class User {
     private String fullname;
     private String email;
     private String password;
-    private USER_ROLE role;
+    private USER_ROLE role = USER_ROLE.CUSTOMER;
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
