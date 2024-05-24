@@ -20,6 +20,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
+    
+    private final String jwtSecretKey;
+    
+    public JwtTokenValidator(String jwtSecretKey) {
+        this.jwtSecretKey = jwtSecretKey;
+    }
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws
                                                                                                                        ServletException,
@@ -29,7 +36,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         if (jwt != null && jwt.startsWith(JwtConstant.JWT_PREFIX)) {
             jwt = jwt.substring(7);
             try {
-                SecretKey secretKey = Keys.hmacShaKeyFor(JwtConstant.JWT_SECRET_KEY.getBytes());
+                SecretKey secretKey = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
                 Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody();
                 
                 String email = String.valueOf(claims.get("email"));

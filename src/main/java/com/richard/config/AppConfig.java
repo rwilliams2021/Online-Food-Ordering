@@ -1,5 +1,6 @@
 package com.richard.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,11 @@ import java.util.Collections;
 @EnableWebSecurity
 public class AppConfig {
     
+    private final String jwtSecretKey;
+    
+    public AppConfig(@Value("${jwtSecretKey}") String jwtSecretKey) {
+        this.jwtSecretKey = jwtSecretKey;
+    }
     /**
      * Configures the security filter chain for the application.
      *
@@ -36,7 +42,7 @@ public class AppConfig {
                                                         .requestMatchers("/api/**").authenticated()
                                                         .anyRequest().permitAll()
                                   )
-            .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+            .addFilterBefore(new JwtTokenValidator(jwtSecretKey), BasicAuthenticationFilter.class)
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         
