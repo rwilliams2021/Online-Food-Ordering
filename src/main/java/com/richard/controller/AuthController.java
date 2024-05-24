@@ -49,7 +49,7 @@ public class AuthController {
         User createdUser = new User();
         createdUser.setEmail(user.getEmail());
         createdUser.setFullname(user.getFullname());
-        createdUser.setRole(USER_ROLE.CUSTOMER);
+        createdUser.setRole(user.getRole());
         createdUser.setPassword(passwordEncoder.encode(user.getPassword()));
         
         User savedUser = userRepository.save(createdUser);

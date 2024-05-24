@@ -1,6 +1,5 @@
 package com.richard.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.richard.dto.RestaurantDto;
 import jakarta.persistence.*;
@@ -24,7 +23,7 @@ public class User {
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private USER_ROLE role = USER_ROLE.CUSTOMER;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
