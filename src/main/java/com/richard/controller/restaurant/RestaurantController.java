@@ -1,4 +1,4 @@
-package com.richard.controller;
+package com.richard.controller.restaurant;
 
 import com.richard.dto.RestaurantDto;
 import com.richard.model.Restaurant;

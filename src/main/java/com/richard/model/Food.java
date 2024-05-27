@@ -26,7 +26,8 @@ public class Food {
     @ManyToOne
     private Restaurant restaurant;
     private boolean isVegetarian;
-    private boolean isSeasonable;
+    private boolean isNonVegetarian;
+    private boolean isSeasonal;
     @ManyToMany
     private List<IngredientsItem> ingredients = new ArrayList<>();
     private Date creationDate;
