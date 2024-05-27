@@ -92,6 +92,13 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurant;
     }
     
+    /*
+     * Add or remove restaurant from favourites
+     * If restaurant is already in favourites, remove it
+     * @param id
+     * @param user
+     * @return RestaurantDto
+     */
     @Override
     public RestaurantDto addToFavourites(Long id, User user) throws Exception {
         Restaurant restaurant = findRestaurantById(id);
@@ -109,6 +116,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         userRepository.save(user);
         return dto;
+    }
+    
+    @Override
+    public void deleteAllFavourites(User user) {
+        user.getFavourites().clear();
+        userRepository.save(user);
     }
     
     @Override

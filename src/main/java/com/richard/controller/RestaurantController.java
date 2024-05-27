@@ -3,6 +3,7 @@ package com.richard.controller;
 import com.richard.dto.RestaurantDto;
 import com.richard.model.Restaurant;
 import com.richard.model.User;
+import com.richard.response.MessageResponse;
 import com.richard.service.RestaurantService;
 import com.richard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ public class RestaurantController {
             @RequestHeader("Authorization") String jwt,
             @RequestParam String keyword) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
         List<Restaurant> restaurants = restaurantService.searchRestaurant(keyword);
         return ResponseEntity.ok(restaurants);
     }
@@ -35,7 +35,6 @@ public class RestaurantController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable("id") Long id) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
         Restaurant restaurant = restaurantService.findRestaurantById(id);
         return ResponseEntity.ok(restaurant);
     }
@@ -48,5 +47,16 @@ public class RestaurantController {
         User user = userService.findUserByJwtToken(jwt);
         RestaurantDto dto = restaurantService.addToFavourites(id, user);
         return ResponseEntity.ok(dto);
+    }
+    
+    @DeleteMapping("/clear-favourites")
+    public ResponseEntity<MessageResponse> deleteAllFavourites(
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        
+        User user = userService.findUserByJwtToken(jwt);
+        restaurantService.deleteAllFavourites(user);
+        MessageResponse messageResponse = new MessageResponse();
+        messageResponse.setMessage("Favourites cleared successfully");
+        return ResponseEntity.ok(messageResponse);
     }
 }
