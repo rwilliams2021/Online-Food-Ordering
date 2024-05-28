@@ -1,7 +1,7 @@
 package com.richard.request;
 
 import com.richard.model.Category;
-import com.richard.model.IngredientsItem;
+import com.richard.model.IngredientItem;
 import lombok.Data;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public class CreateFoodRequest {
     private Long restaurantId;
     private boolean vegetarian;
     private boolean seasonal;
-    private List<IngredientsItem> ingredients;
+    private List<IngredientItem> ingredients;
 }

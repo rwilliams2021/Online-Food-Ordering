@@ -2,8 +2,9 @@ package com.richard.service;
 
 import com.richard.model.User;
 
+import java.util.Optional;
+
 public interface UserService {
     
-    User findUserByJwtToken(String token) throws Exception;
-    User findUserByEmail(String email) throws Exception;
+    Optional<User> findUserByJwtToken(String token) throws Exception;
 }

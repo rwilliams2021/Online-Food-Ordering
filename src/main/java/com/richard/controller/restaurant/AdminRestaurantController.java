@@ -27,7 +27,7 @@ public class AdminRestaurantController {
             @RequestBody CreateRestaurantRequest req,
             @RequestHeader("Authorization") String jwt) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Restaurant restaurant = restaurantService.createRestaurant(req, user);
         return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
     }
@@ -38,7 +38,7 @@ public class AdminRestaurantController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable("id") Long id) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Restaurant restaurant = restaurantService.updateRestaurant(id, req);
         return ResponseEntity.ok(restaurant);
     }
@@ -48,7 +48,7 @@ public class AdminRestaurantController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable("id") Long id) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         restaurantService.deleteRestaurant(id);
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.setMessage("Restaurant deleted successfully");
@@ -60,7 +60,7 @@ public class AdminRestaurantController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable("id") Long id) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Restaurant restaurant = restaurantService.updateRestaurantStatus(id);
         return ResponseEntity.ok(restaurant);
     }
@@ -68,7 +68,7 @@ public class AdminRestaurantController {
     @GetMapping("/user")
     public ResponseEntity<Restaurant> findRestaurantByUserId(
             @RequestHeader("Authorization") String jwt) throws Exception {
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Restaurant restaurant = restaurantService.getRestaurantByUserId(user.getId());
         return ResponseEntity.ok(restaurant);
     }

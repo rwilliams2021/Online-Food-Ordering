@@ -44,7 +44,7 @@ public class RestaurantController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable("id") Long id) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         RestaurantDto dto = restaurantService.addToFavourites(id, user);
         return ResponseEntity.ok(dto);
     }
@@ -53,7 +53,7 @@ public class RestaurantController {
     public ResponseEntity<MessageResponse> deleteAllFavourites(
             @RequestHeader("Authorization") String jwt) throws Exception {
         
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         restaurantService.deleteAllFavourites(user);
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.setMessage("Favourites cleared successfully");

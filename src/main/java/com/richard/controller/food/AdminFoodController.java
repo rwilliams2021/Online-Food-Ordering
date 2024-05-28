@@ -27,7 +27,7 @@ public class AdminFoodController {
     @PostMapping("/create")
     public ResponseEntity<Food> createFood(@RequestBody CreateFoodRequest req,
                                            @RequestHeader("Authorization") String jwt) throws Exception {
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Restaurant restaurant = restaurantService.findRestaurantById(req.getRestaurantId());
         Food food = foodService.createFood(req, req.getCategory(), restaurant);
         return new ResponseEntity<>(food, HttpStatus.CREATED);
@@ -36,7 +36,7 @@ public class AdminFoodController {
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteFood(@PathVariable("id") Long id,
                                                       @RequestHeader("Authorization") String jwt) throws Exception {
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         foodService.deleteFood(id);
         
         MessageResponse rsp = new MessageResponse();
@@ -48,7 +48,7 @@ public class AdminFoodController {
     @PutMapping("/{id}")
     public ResponseEntity<Food> updateFoodAvailabilityStatus(@PathVariable("id") Long id,
                                                       @RequestHeader("Authorization") String jwt) throws Exception {
-        User user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Food food = foodService.updateAvailability(id);
         return new ResponseEntity<>(food, HttpStatus.OK);
     }

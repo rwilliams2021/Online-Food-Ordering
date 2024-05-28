@@ -2,6 +2,7 @@ package com.richard.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = {"id"})
 public class Food {
     
     @Id
@@ -29,6 +31,6 @@ public class Food {
     private boolean isNonVegetarian;
     private boolean isSeasonal;
     @ManyToMany
-    private List<IngredientsItem> ingredients = new ArrayList<>();
+    private List<IngredientItem> ingredients = new ArrayList<>();
     private Date creationDate;
 }
