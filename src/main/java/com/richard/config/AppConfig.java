@@ -23,7 +23,7 @@ public class AppConfig {
     
     private final String jwtSecretKey;
     
-    public AppConfig(@Value("${jwtSecretKey}") String jwtSecretKey) {
+    public AppConfig(@Value("${jwt.secret.key}") String jwtSecretKey) {
         this.jwtSecretKey = jwtSecretKey;
     }
     /**
