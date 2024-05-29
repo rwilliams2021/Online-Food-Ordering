@@ -9,7 +9,6 @@ import com.richard.response.AuthResponse;
 import com.richard.respository.CartRepository;
 import com.richard.respository.UserRepository;
 import com.richard.service.CustomerUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,16 +28,23 @@ import java.util.Collection;
 @RequestMapping("/auth")
 public class AuthController {
     
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtProvider jwtProvider;
-    @Autowired
-    private CustomerUserDetailsService customerUserDetailsService;
-    @Autowired
-    private CartRepository cartRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+    private final CustomerUserDetailsService customerUserDetailsService;
+    private final CartRepository cartRepository;
+    
+    public AuthController(UserRepository userRepository,
+                          PasswordEncoder passwordEncoder,
+                          JwtProvider jwtProvider,
+                          CustomerUserDetailsService customerUserDetailsService,
+                          CartRepository cartRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
+        this.customerUserDetailsService = customerUserDetailsService;
+        this.cartRepository = cartRepository;
+    }
     
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {

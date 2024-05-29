@@ -5,7 +5,6 @@ import com.richard.model.Food;
 import com.richard.model.Restaurant;
 import com.richard.request.CreateFoodRequest;
 import com.richard.respository.FoodRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.List;
 @Service
 public class FoodServiceImpl implements FoodService {
 
-    @Autowired
-    private FoodRepository foodRepository;
+    private final FoodRepository foodRepository;
+    
+    public FoodServiceImpl(FoodRepository foodRepository) {
+        this.foodRepository = foodRepository;
+    }
     
     @Override
     public Food createFood(CreateFoodRequest req, Category category, Restaurant restaurant) {

@@ -8,7 +8,6 @@ import com.richard.request.CreateRestaurantRequest;
 import com.richard.respository.AddressRepository;
 import com.richard.respository.RestaurantRepository;
 import com.richard.respository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,14 +17,20 @@ import java.util.Optional;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
     
-    @Autowired
-    private RestaurantRepository restaurantRepository;
-    @Autowired
-    private AddressRepository addressRepository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final AddressRepository addressRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
+    
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository,
+                            AddressRepository addressRepository,
+                            UserService userService,
+                            UserRepository userRepository) {
+        this.restaurantRepository = restaurantRepository;
+        this.addressRepository = addressRepository;
+        this.userService = userService;
+        this.userRepository = userRepository;
+    }
     
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequest req, User user) {

@@ -8,7 +8,6 @@ import com.richard.response.MessageResponse;
 import com.richard.service.FoodService;
 import com.richard.service.RestaurantService;
 import com.richard.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/food")
 public class AdminFoodController {
     
-    @Autowired
-    private FoodService foodService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RestaurantService restaurantService;
+    private final FoodService foodService;
+    private final UserService userService;
+    private final RestaurantService restaurantService;
+    
+    public AdminFoodController(FoodService foodService, UserService userService, RestaurantService restaurantService) {
+        this.foodService = foodService;
+        this.userService = userService;
+        this.restaurantService = restaurantService;
+    }
     
     @PostMapping("/create")
     public ResponseEntity<Food> createFood(@RequestBody CreateFoodRequest req,

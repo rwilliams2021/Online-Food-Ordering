@@ -5,7 +5,6 @@ import com.richard.model.User;
 import com.richard.service.FoodService;
 import com.richard.service.RestaurantService;
 import com.richard.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +15,15 @@ import java.util.List;
 @RequestMapping("/food")
 public class FoodController {
     
-    @Autowired
-    private FoodService foodService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RestaurantService restaurantService;
+    private final FoodService foodService;
+    private final UserService userService;
+    private final RestaurantService restaurantService;
+    
+    public FoodController(FoodService foodService, UserService userService, RestaurantService restaurantService) {
+        this.foodService = foodService;
+        this.userService = userService;
+        this.restaurantService = restaurantService;
+    }
     
     @GetMapping("/search")
     public ResponseEntity<List<Food>> searchFood(@RequestParam String name,

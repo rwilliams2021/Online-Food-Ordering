@@ -8,26 +8,29 @@ import com.richard.request.AddCartItemRequest;
 import com.richard.respository.CartItemRepository;
 import com.richard.respository.CartRepository;
 import com.richard.respository.FoodRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CartServiceImpl implements CartService {
     
-    @Autowired
-    private CartRepository cartRepository;
     
-    @Autowired
-    private CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final FoodRepository foodRepository;
+    private final FoodService foodService;
+    private final UserService userService;
     
-    @Autowired
-    private FoodRepository foodRepository;
-
-    @Autowired
-    private FoodService foodService;
-    
-    @Autowired
-    private UserService userService;
+    public CartServiceImpl(CartRepository cartRepository,
+                            CartItemRepository cartItemRepository,
+                            FoodRepository foodRepository,
+                            FoodService foodService,
+                            UserService userService) {
+        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.foodRepository = foodRepository;
+        this.foodService = foodService;
+        this.userService = userService;
+    }
     
     @Override
     public CartItem addItemToCart(AddCartItemRequest req, String jwt) throws Exception {

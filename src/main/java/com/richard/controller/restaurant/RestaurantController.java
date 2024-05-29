@@ -6,7 +6,6 @@ import com.richard.model.User;
 import com.richard.response.MessageResponse;
 import com.richard.service.RestaurantService;
 import com.richard.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +15,13 @@ import java.util.List;
 @RequestMapping("/restaurant")
 public class RestaurantController {
     
-    @Autowired
-    private RestaurantService restaurantService;
-    @Autowired
-    private UserService userService;
+    private final RestaurantService restaurantService;
+    private final UserService userService;
+    
+    public RestaurantController(RestaurantService restaurantService, UserService userService) {
+        this.restaurantService = restaurantService;
+        this.userService = userService;
+    }
     
     @GetMapping("/search")
     public ResponseEntity<List<Restaurant>> searchRestaurant(

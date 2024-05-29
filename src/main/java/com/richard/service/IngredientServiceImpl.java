@@ -5,20 +5,24 @@ import com.richard.model.IngredientItem;
 import com.richard.model.Restaurant;
 import com.richard.respository.IngredientCategoryRepository;
 import com.richard.respository.IngredientItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class IngredientServiceImpl implements IngredientService {
     
-    @Autowired
-    private IngredientCategoryRepository ingredientCategoryRepository;
+    private final IngredientCategoryRepository ingredientCategoryRepository;
+    private final IngredientItemRepository ingredientItemRepository;
+    private final RestaurantService restaurantService;
     
-    @Autowired
-    private IngredientItemRepository ingredientItemRepository;
-    
-    @Autowired
-    private RestaurantService restaurantService;
+    public IngredientServiceImpl(IngredientCategoryRepository ingredientCategoryRepository,
+                                 IngredientItemRepository ingredientItemRepository,
+                                 RestaurantService restaurantService) {
+        this.ingredientCategoryRepository = ingredientCategoryRepository;
+        this.ingredientItemRepository = ingredientItemRepository;
+        this.restaurantService = restaurantService;
+    }
     
     @Override
     public IngredientCategory createIngredientCategory(String name, Long restaurantId) throws Exception {

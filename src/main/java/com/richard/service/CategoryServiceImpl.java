@@ -3,7 +3,6 @@ package com.richard.service;
 import com.richard.model.Category;
 import com.richard.model.Restaurant;
 import com.richard.respository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +10,14 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final RestaurantService restaurantService;
     
-    @Autowired
-    private RestaurantService restaurantService;
+    public CategoryServiceImpl(CategoryRepository categoryRepository,
+                            RestaurantService restaurantService) {
+        this.categoryRepository = categoryRepository;
+        this.restaurantService = restaurantService;
+    }
 
     @Override
     public Category createCategory(String name, Long userId) throws Exception {
