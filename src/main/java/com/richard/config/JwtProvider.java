@@ -20,7 +20,7 @@ public class JwtProvider {
     
     private final SecretKey key;
     
-    public JwtProvider(@Value("${jwtSecretKey}") String jwtSecretKey) {
+    public JwtProvider(@Value("${jwt.secret.key}") String jwtSecretKey) {
         this.key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
     }
     
