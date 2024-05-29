@@ -6,7 +6,7 @@ import com.richard.model.Restaurant;
 import com.richard.model.User;
 import com.richard.request.CreateRestaurantRequest;
 import com.richard.respository.AddressRepository;
-import com.richard.respository.RestaurantRepository;
+import com.richard.respository.RestaurantService;
 import com.richard.respository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +15,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RestaurantServiceImpl implements RestaurantService {
+public class RestaurantServiceImpl implements com.richard.service.RestaurantService {
     
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantRepository;
     private final AddressRepository addressRepository;
     private final UserService userService;
     private final UserRepository userRepository;
     
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository,
-                            AddressRepository addressRepository,
-                            UserService userService,
-                            UserRepository userRepository) {
+    public RestaurantServiceImpl(RestaurantService restaurantRepository,
+                                 AddressRepository addressRepository,
+                                 UserService userService,
+                                 UserRepository userRepository) {
         this.restaurantRepository = restaurantRepository;
         this.addressRepository = addressRepository;
         this.userService = userService;

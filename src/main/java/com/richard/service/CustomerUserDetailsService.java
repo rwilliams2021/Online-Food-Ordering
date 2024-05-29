@@ -1,6 +1,6 @@
 package com.richard.service;
 
-import com.richard.model.USER_ROLE;
+import com.richard.model.UserRole;
 import com.richard.model.User;
 import com.richard.respository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +25,7 @@ public class CustomerUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        USER_ROLE role = user.getRole();
+        UserRole role = user.getRole();
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(role.toString());
         authorities.add(new SimpleGrantedAuthority(role.toString()));
         

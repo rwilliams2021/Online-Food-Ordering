@@ -8,8 +8,8 @@ public interface CartService {
     CartItem addItemToCart(AddCartItemRequest req, String jwt) throws Exception;
     CartItem updateCartItemQuantity(Long cartItemId, int quantity) throws Exception;
     Cart removeItemFromCart(Long cartItemId, String jwt) throws Exception;
-    Long calculateCartTotal(Cart cart);
+    Double calculateCartTotal(Cart cart);
     Cart findCartById(Long cartId) throws Exception;
-    Cart findCartByUserId(Long userId);
-    Cart clearCart(Long userId);
+    Cart findCartByUserId(Long userId) throws Exception;
+    Cart clearCart(Long userId) throws Exception;
 }

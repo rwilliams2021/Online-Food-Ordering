@@ -2,7 +2,7 @@ package com.richard.controller;
 
 import com.richard.config.JwtProvider;
 import com.richard.model.Cart;
-import com.richard.model.USER_ROLE;
+import com.richard.model.UserRole;
 import com.richard.model.User;
 import com.richard.request.LoginRequest;
 import com.richard.response.AuthResponse;
@@ -92,7 +92,7 @@ public class AuthController {
         
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String role =  authorities.isEmpty()?null:authorities.iterator().next().getAuthority();
-        authResponse.setRole(USER_ROLE.valueOf(role));
+        authResponse.setRole(UserRole.valueOf(role));
         
         return ResponseEntity.ok(authResponse);
     }

@@ -78,9 +78,9 @@ public class CartServiceImpl implements CartService {
     }
     
     @Override
-    public Long calculateCartTotal(Cart cart) {
+    public Double calculateCartTotal(Cart cart) {
         return cart.getItems().stream()
-                   .mapToLong(CartItem::getTotalPrice)
+                   .mapToDouble(CartItem::getTotalPrice)
                    .sum();
     }
     
@@ -90,12 +90,12 @@ public class CartServiceImpl implements CartService {
     }
     
     @Override
-    public Cart findCartByUserId(Long userId) {
+    public Cart findCartByUserId(Long userId) throws Exception {
         return cartRepository.findByCustomerId(userId);
     }
     
     @Override
-    public Cart clearCart(Long userId) {
+    public Cart clearCart(Long userId) throws Exception {
         Cart cart = findCartByUserId(userId);
         cart.getItems().clear();
         return cartRepository.save(cart);

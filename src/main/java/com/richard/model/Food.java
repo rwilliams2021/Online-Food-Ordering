@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = { "id" })
 public class Food {
     
     @Id
@@ -32,5 +33,5 @@ public class Food {
     private boolean isSeasonal;
     @ManyToMany
     private List<IngredientItem> ingredients = new ArrayList<>();
-    private Date creationDate;
+    private LocalDateTime creationDate;
 }

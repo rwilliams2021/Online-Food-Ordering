@@ -1,6 +1,6 @@
 package com.richard.model;
 
-public enum USER_ROLE {
+public enum UserRole {
     CUSTOMER,
     RESTAURANT_OWNER,
     ADMIN;

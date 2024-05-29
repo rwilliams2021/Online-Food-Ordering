@@ -24,7 +24,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private USER_ROLE role = USER_ROLE.CUSTOMER;
+    private UserRole role = UserRole.CUSTOMER;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
     @ElementCollection

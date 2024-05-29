@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,5 +18,7 @@ public class OrderItem {
     private Long id;
     @ManyToOne
     private Food food;
-    
+    private List<String> ingredients;
+    private int quantity;
+    private double totalPrice;
 }
