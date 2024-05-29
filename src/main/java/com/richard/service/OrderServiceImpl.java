@@ -3,7 +3,7 @@ package com.richard.service;
 import com.richard.enums.OrderStatus;
 import com.richard.model.*;
 import com.richard.request.OrderRequest;
-import com.richard.respository.RestaurantService;
+import com.richard.respository.RestaurantRepository;
 import com.richard.respository.*;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
-    private final RestaurantService restaurantService;
+    private final RestaurantRepository restaurantService;
     private final CartService cartService;
     
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
                             UserService userService,
                             AddressRepository addressRepository,
                             UserRepository userRepository,
-                            RestaurantService restaurantService,
+                            RestaurantRepository restaurantService,
                             CartService cartService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
