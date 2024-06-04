@@ -86,8 +86,8 @@ public class FoodServiceImpl implements FoodService {
     }
     
     @Override
-    public Food updateAvailability(Long id) throws Exception {
-        Food food = findFoodById(id);
+    public Food updateAvailability(Long foodId) throws Exception {
+        Food food = findFoodById(foodId);
         food.setAvailable(!food.isAvailable());
         return foodRepository.save(food);
     }

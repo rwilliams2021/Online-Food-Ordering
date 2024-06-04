@@ -23,7 +23,7 @@ public class CartController {
         this.userService = userService;
     }
     
-    @PutMapping("/cart/add")
+    @PutMapping("/add")
     public ResponseEntity<CartItem> addItemToCart(
             @RequestBody AddCartItemRequest req,
             @RequestHeader("Authorization") String jwt) throws Exception {
@@ -47,7 +47,7 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
     
-    @PutMapping("/cart/clear")
+    @PutMapping("/clear")
     public ResponseEntity<Cart> clearCart(
             @RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
@@ -55,7 +55,7 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
     
-    @GetMapping("/cart")
+    @GetMapping
     public ResponseEntity<Cart> getCart(@RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         Cart cart = cartService.findCartByUserId(user.getId());

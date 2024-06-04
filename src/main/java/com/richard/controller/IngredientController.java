@@ -21,32 +21,32 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    @PostMapping("/category")
-    public ResponseEntity<IngredientCategory> createIngredientCategory(
-            @RequestBody IngredientCategoryRequest req) throws Exception {
-        IngredientCategory category = ingredientService.createIngredientCategory(req.getName(), req.getRestaurantId());
-        return new ResponseEntity<>(category, HttpStatus.CREATED);
-    }
-
     @PostMapping
     public ResponseEntity<IngredientItem> createIngredientItem(
             @RequestBody IngredientRequest req) throws Exception {
         IngredientItem item = ingredientService.createIngredientItem(req.getName(), req.getCategoryId(), req.getRestaurantId());
         return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
-
+    
     @PutMapping("/{id}/stock")
-    public ResponseEntity<IngredientItem> updateIngredientItem(
+    public ResponseEntity<IngredientItem> updateIngredientStock(
             @PathVariable("id") Long id) throws Exception {
         IngredientItem item = ingredientService.updateStock(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
-
+    
     @GetMapping("/restaurant/{id}")
     public ResponseEntity<List<IngredientItem>> getRestaurantIngredients(
             @PathVariable("id") Long id) throws Exception {
         List<IngredientItem> items = ingredientService.findRestaurantIngredients(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+    
+    @PostMapping("/category")
+    public ResponseEntity<IngredientCategory> createIngredientCategory(
+            @RequestBody IngredientCategoryRequest req) throws Exception {
+        IngredientCategory category = ingredientService.createIngredientCategory(req.getName(), req.getRestaurantId());
+        return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
     @GetMapping("/restaurant/{id}/category")
