@@ -1,5 +1,6 @@
 package com.richard.controller.food;
 
+import com.richard.enums.FoodCategory;
 import com.richard.model.Food;
 import com.richard.model.User;
 import com.richard.service.FoodService;
