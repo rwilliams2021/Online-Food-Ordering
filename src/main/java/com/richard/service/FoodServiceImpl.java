@@ -7,6 +7,7 @@ import com.richard.request.CreateFoodRequest;
 import com.richard.respository.FoodRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,7 +30,12 @@ public class FoodServiceImpl implements FoodService {
         food.setPrice(req.getPrice());
         food.setIngredients(req.getIngredients());
         food.setSeasonal(req.isSeasonal());
-        food.setVegetarian(req.isVegetarian());
+        if (req.isVegetarian()) {
+            food.setVegetarian(true);
+        } else {
+            food.setNonVegetarian(true);
+        }
+        food.setCreationDate(LocalDateTime.now());
         
         Food savedFood = foodRepository.save(food);
         restaurant.getFoods().add(savedFood);
