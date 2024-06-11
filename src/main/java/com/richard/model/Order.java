@@ -1,6 +1,8 @@
 package com.richard.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.richard.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,9 +22,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @JsonBackReference
     @ManyToOne
     private User customer;
     @JsonIgnore
+    @JsonBackReference
     @ManyToOne
     private Restaurant restaurant;
     private Long totalAmount;
