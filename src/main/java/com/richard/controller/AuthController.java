@@ -48,7 +48,7 @@ public class AuthController {
     
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new Exception("Email is already used by another account.");
         }
         
@@ -76,7 +76,7 @@ public class AuthController {
         return ResponseEntity.ok(authResponse);
     }
     
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest req) throws Exception {
         
         String username = req.getEmail();

@@ -1,5 +1,6 @@
 package com.richard.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class Restaurant {
     @Embedded
     private ContactInformation contactInformation;
     private String openingHours;
+    @JsonBackReference
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
     @ElementCollection
@@ -37,6 +39,7 @@ public class Restaurant {
     private LocalDateTime registrationDate;
     private boolean open;
     @JsonIgnore
+    @JsonBackReference
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Food> foods = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.richard.controller.food;
 
+import com.richard.enums.FoodCategory;
 import com.richard.model.Food;
 import com.richard.model.User;
 import com.richard.service.FoodService;
@@ -26,8 +27,9 @@ public class FoodController {
     }
     
     @GetMapping("/search")
-    public ResponseEntity<List<Food>> searchFood(@RequestParam String name,
-                                                 @RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<List<Food>> searchFood(
+            @RequestParam String name,
+            @RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         List<Food> foods = foodService.searchFood(name);
         return new ResponseEntity<>(foods, HttpStatus.OK);
@@ -38,13 +40,12 @@ public class FoodController {
             @RequestParam boolean vegetarian,
             @RequestParam boolean seasonal,
             @RequestParam boolean nonVegetarian,
-            @RequestParam(required = false) String category,
+            @RequestParam String category,
             @PathVariable("id") Long restaurantId,
             @RequestHeader("Authorization") String jwt) throws Exception {
-
+        
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
-        List<Food> foods = foodService.getRestaurantFood(restaurantId, vegetarian, seasonal, nonVegetarian, category);
+        List<Food> foods = foodService.getRestaurantFood(restaurantId, vegetarian, nonVegetarian, seasonal, category);
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
-    
 }

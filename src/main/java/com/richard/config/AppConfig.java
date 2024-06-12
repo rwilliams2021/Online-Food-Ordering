@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +27,7 @@ public class AppConfig {
     public AppConfig(@Value("${jwt.secret.key}") String jwtSecretKey) {
         this.jwtSecretKey = jwtSecretKey;
     }
+    
     /**
      * Configures the security filter chain for the application.
      *
@@ -48,30 +50,29 @@ public class AppConfig {
         
         return http.build();
     }
-
-    
-    
     
     /**
-     * Returns a CorsConfiguration object that specifies the allowed origins, methods, headers, credentials, and max age for CORS
+     * Returns a CorsConfigurationSource object that specifies the allowed origins, methods, headers, credentials, and max age for CORS
      * requests.
      *
-     * @return a CorsConfiguration object with the specified configuration
+     * @return a CorsConfigurationSource object with the specified configuration
      */
-    private CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            CorsConfiguration cfg = new CorsConfiguration();
-            cfg.setAllowedOrigins(Arrays.asList(
-                    "http://localhost:4200",
-                    "http://localhost:8080"
-                                               ));
-            cfg.setAllowedMethods(Collections.singletonList("*"));
-            cfg.setAllowCredentials(true);
-            cfg.setAllowedHeaders(Collections.singletonList("*"));
-            cfg.setExposedHeaders(Collections.singletonList("Authorization"));
-            cfg.setMaxAge(3600L);
-            return null;
-        };
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
+                "http://localhost:8080"
+                                                     ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
     
     @Bean

@@ -1,5 +1,6 @@
 package com.richard.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +27,7 @@ public class Food {
     @ElementCollection
     private List<String> images;
     private boolean available;
+    @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
     private boolean isVegetarian;

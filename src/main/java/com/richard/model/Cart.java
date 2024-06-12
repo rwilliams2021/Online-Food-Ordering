@@ -1,9 +1,7 @@
 package com.richard.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,16 @@ public class Cart {
     private Long id;
     @OneToOne
     private User customer;
-    private Long total;
+    private Double total;
+    @Getter(AccessLevel.NONE)
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
+    
+    public List<CartItem> getItems() {
+        Double totalPrice = items.stream()
+            .mapToDouble(CartItem::getTotalPrice)
+            .sum();
+        this.setTotal(totalPrice);
+        return items;
+    }
 }

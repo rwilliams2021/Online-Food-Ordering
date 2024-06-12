@@ -1,5 +1,6 @@
 package com.richard.service;
 
+import com.richard.enums.FoodCategory;
 import com.richard.model.Category;
 import com.richard.model.Food;
 import com.richard.model.Restaurant;
@@ -7,11 +8,14 @@ import com.richard.request.CreateFoodRequest;
 import com.richard.respository.FoodRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class FoodServiceImpl implements FoodService {
-
+    
     private final FoodRepository foodRepository;
     
     public FoodServiceImpl(FoodRepository foodRepository) {
@@ -29,7 +33,12 @@ public class FoodServiceImpl implements FoodService {
         food.setPrice(req.getPrice());
         food.setIngredients(req.getIngredients());
         food.setSeasonal(req.isSeasonal());
-        food.setVegetarian(req.isVegetarian());
+        if (req.isVegetarian()) {
+            food.setVegetarian(true);
+        } else {
+            food.setNonVegetarian(true);
+        }
+        food.setCreationDate(LocalDateTime.now());
         
         Food savedFood = foodRepository.save(food);
         restaurant.getFoods().add(savedFood);
@@ -51,28 +60,38 @@ public class FoodServiceImpl implements FoodService {
                                         boolean isSeasonal,
                                         String category) {
         List<Food> foods = foodRepository.findByRestaurantId(id);
+        
+        Stream<Food> foodStream = foods.stream();
+        
         if (isVegetarian) {
-            foods = foods.stream().filter(Food::isVegetarian).toList();
+            foodStream = foodStream.filter(Food::isVegetarian);
         }
         if (isNonVegetarian) {
-            foods = foods.stream().filter(Food::isNonVegetarian).toList();
+            foodStream = foodStream.filter(Food::isNonVegetarian);
         }
         if (isSeasonal) {
-            foods = foods.stream().filter(Food::isSeasonal).toList();
+            foodStream = foodStream.filter(Food::isSeasonal);
         }
-        if (category != null && !category.isEmpty()) {
-            foods = filterByCategory(foods, category);
+        if (category != null && !category.isEmpty() && !category.toUpperCase().equals(FoodCategory.ALL.name())) {
+            if (isValidFoodCategory(category)) {
+                foodStream = filterByCategory(foodStream, category);
+            }
         }
-        return foods;
+        
+        return foodStream.collect(Collectors.toList());
     }
     
-    private List<Food> filterByCategory(List<Food> foods, String category) {
-        return foods.stream().filter(food -> {
-            if (food.getFoodCategory() == null) {
-                return false;
-            }
-            return food.getFoodCategory().getName().equals(category);
-        }).toList();
+    private boolean isValidFoodCategory(String category) {
+        try {
+            FoodCategory.valueOf(category.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid food category", e);
+        }
+    }
+    
+    private Stream<Food> filterByCategory(Stream<Food> foods, String category) {
+        return foods.filter(food -> food.getFoodCategory().getName().equals(category));
     }
     
     @Override
@@ -86,8 +105,8 @@ public class FoodServiceImpl implements FoodService {
     }
     
     @Override
-    public Food updateAvailability(Long id) throws Exception {
-        Food food = findFoodById(id);
+    public Food updateAvailability(Long foodId) throws Exception {
+        Food food = findFoodById(foodId);
         food.setAvailable(!food.isAvailable());
         return foodRepository.save(food);
     }
