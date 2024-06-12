@@ -3,7 +3,9 @@ package com.richard.controller;
 import com.richard.model.Order;
 import com.richard.model.User;
 import com.richard.request.OrderRequest;
+import com.richard.response.PaymentResponse;
 import com.richard.service.OrderService;
+import com.richard.service.PaymentService;
 import com.richard.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +19,22 @@ public class OrderController {
     
     private final OrderService orderService;
     private final UserService userService;
+    private final PaymentService paymentService;
     
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService, UserService userService, PaymentService paymentService) {
         this.orderService = orderService;
         this.userService = userService;
+        this.paymentService = paymentService;
     }
     
     @PostMapping
-    public ResponseEntity<Order> createOrder(
+    public ResponseEntity<PaymentResponse> createOrder(
             @RequestBody OrderRequest req,
             @RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found."));
         Order order = orderService.createOrder(req, user);
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
+        PaymentResponse paymentResponse = paymentService.createPaymentLink(order);
+        return new ResponseEntity<>(paymentResponse, HttpStatus.CREATED);
     }
     
     @GetMapping
