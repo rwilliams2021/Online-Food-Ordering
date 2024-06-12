@@ -72,6 +72,7 @@ public class AuthController {
         authResponse.setJwt(jwt);
         authResponse.setMessage("User created successfully.");
         authResponse.setRole(savedUser.getRole());
+        authResponse.setUser(savedUser);
         
         return ResponseEntity.ok(authResponse);
     }
@@ -93,6 +94,9 @@ public class AuthController {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String role =  authorities.isEmpty()?null:authorities.iterator().next().getAuthority();
         authResponse.setRole(UserRole.valueOf(role));
+        
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new Exception("User not found."));
+        authResponse.setUser(user);
         
         return ResponseEntity.ok(authResponse);
     }
