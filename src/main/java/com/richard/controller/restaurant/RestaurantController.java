@@ -42,13 +42,13 @@ public class RestaurantController {
     }
     
     @PutMapping("/{id}/add-favourites")
-    public ResponseEntity<RestaurantDto> addToFavourites(
+    public ResponseEntity<List<RestaurantDto>> addToFavourites(
             @RequestHeader("Authorization") String jwt,
             @PathVariable("id") Long id) throws Exception {
         
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
-        RestaurantDto dto = restaurantService.addToFavourites(id, user);
-        return ResponseEntity.ok(dto);
+        List<RestaurantDto> favRestaurants = restaurantService.addToFavourites(id, user);
+        return ResponseEntity.ok(favRestaurants);
     }
     
     @DeleteMapping("/clear-favourites")
@@ -60,5 +60,14 @@ public class RestaurantController {
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.setMessage("Favourites cleared successfully");
         return ResponseEntity.ok(messageResponse);
+    }
+    
+    @GetMapping("/favourites")
+    public ResponseEntity<List<RestaurantDto>> getAllFavourites(
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
+        List<RestaurantDto> favourites = restaurantService.getAllFavourites(user);
+        return ResponseEntity.ok(favourites);
     }
 }

@@ -21,13 +21,13 @@ public class Food {
     private String name;
     private String description;
     private Long price;
+    @JsonIgnore
     @ManyToOne
     private Category foodCategory;
     @Column(length = 1000)
     @ElementCollection
     private List<String> images;
     private boolean available;
-    @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
     private boolean isVegetarian;

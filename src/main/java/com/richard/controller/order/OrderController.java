@@ -1,4 +1,4 @@
-package com.richard.controller;
+package com.richard.controller.order;
 
 import com.richard.model.Order;
 import com.richard.model.User;
@@ -43,5 +43,21 @@ public class OrderController {
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found."));
         List<Order> orders = orderService.getOrdersByUser(user.getId());
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteOrder(
+            @PathVariable("id") Long id,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        orderService.deleteOrder(id);
+        return new ResponseEntity<>("Order deleted successfully", HttpStatus.OK);
+    }
+    
+    @DeleteMapping("deleteAll")
+    public ResponseEntity<String> deleteAllOrders(
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found."));
+        orderService.deleteAllOrdersByUser(user.getId());
+        return new ResponseEntity<>("All orders deleted successfully", HttpStatus.OK);
     }
 }

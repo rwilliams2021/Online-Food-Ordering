@@ -22,7 +22,7 @@ public class PaymentServiceImpl implements PaymentService {
         SessionCreateParams params = SessionCreateParams.builder()
                                                         .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                                                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                                                        .setSuccessUrl("http://localhost:3000/payment/success" + order.getId())
+                                                        .setSuccessUrl("http://localhost:3000/payment/success/" + order.getId())
                                                         .setCancelUrl("http://localhost:3000/payment/cancel")
                                                         .addLineItem(SessionCreateParams.LineItem.builder()
                                                                                                  .setQuantity(1L)
@@ -30,8 +30,8 @@ public class PaymentServiceImpl implements PaymentService {
                                                                                                                                                      .setCurrency(
                                                                                                                                                              "usd")
                                                                                                                                                      .setUnitAmount(
-                                                                                                                                                             order.getTotalAmount() *
-                                                                                                                                                             100)
+                                                                                                                                                             (long)(order.getTotalPrice() *
+                                                                                                                                                                                                                                                                                                                                 100))
                                                                                                                                                      .setProductData(
                                                                                                                                                              SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                                                                                                                                                                .setName(
@@ -44,6 +44,6 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentResponse paymentResponse = new PaymentResponse();
         paymentResponse.setPaymentUrl(session.getUrl());
         
-        return null;
+        return paymentResponse;
     }
 }

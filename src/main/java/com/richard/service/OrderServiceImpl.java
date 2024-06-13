@@ -6,6 +6,7 @@ import com.richard.request.OrderRequest;
 import com.richard.respository.RestaurantRepository;
 import com.richard.respository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -86,6 +87,12 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
+    public void deleteOrder(Long orderId) throws Exception {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found."));
+        orderRepository.delete(order);
+    }
+    
+    @Override
     public Order updateOrder(Long orderId, OrderStatus orderStatus) throws Exception {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found."));
         order.setOrderStatus(orderStatus);
@@ -116,5 +123,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findOrderById(Long orderId) throws Exception {
         return orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found."));
+    }
+    
+    @Transactional
+    @Override
+    public void deleteAllOrdersByUser(Long userId) {
+        orderRepository.deleteAllByCustomerId(userId);
     }
 }

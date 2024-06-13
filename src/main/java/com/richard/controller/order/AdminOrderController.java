@@ -1,4 +1,4 @@
-package com.richard.controller;
+package com.richard.controller.order;
 
 import com.richard.enums.OrderStatus;
 import com.richard.model.Order;

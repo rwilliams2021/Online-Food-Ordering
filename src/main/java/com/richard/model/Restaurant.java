@@ -30,7 +30,7 @@ public class Restaurant {
     @Embedded
     private ContactInformation contactInformation;
     private String openingHours;
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
     @ElementCollection
@@ -39,7 +39,6 @@ public class Restaurant {
     private LocalDateTime registrationDate;
     private boolean open;
     @JsonIgnore
-    @JsonBackReference
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Food> foods = new ArrayList<>();
 }
