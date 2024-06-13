@@ -1,6 +1,6 @@
 package com.richard.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.richard.dto.RestaurantDto;
 import jakarta.persistence.*;
@@ -25,11 +25,14 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private UserRole role = UserRole.CUSTOMER;
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
     @ElementCollection
     private List<RestaurantDto> favourites = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
+    @JsonBackReference
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 }
