@@ -105,12 +105,12 @@ public class RestaurantServiceImpl implements com.richard.service.RestaurantServ
      * @return RestaurantDto
      */
     @Override
-    public RestaurantDto addToFavourites(Long id, User user) throws Exception {
+    public List<RestaurantDto> addToFavourites(Long id, User user) throws Exception {
         Restaurant restaurant = findRestaurantById(id);
         
         RestaurantDto dto = new RestaurantDto();
         dto.setDescription(restaurant.getDescription());
-        dto.setTitle(restaurant.getName());
+        dto.setName(restaurant.getName());
         dto.setImages(restaurant.getImages());
         dto.setId(restaurant.getId());
         
@@ -120,7 +120,12 @@ public class RestaurantServiceImpl implements com.richard.service.RestaurantServ
             user.getFavourites().add(dto);
         }
         userRepository.save(user);
-        return dto;
+        return user.getFavourites();
+    }
+    
+    @Override
+    public List<RestaurantDto> getAllFavourites(User user) {
+        return user.getFavourites();
     }
     
     @Override

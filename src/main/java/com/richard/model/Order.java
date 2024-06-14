@@ -22,11 +22,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
     private User customer;
     @JsonIgnore
-    @JsonBackReference
     @ManyToOne
     private Restaurant restaurant;
     private Long totalAmount;
@@ -39,3 +38,8 @@ public class Order {
     private int totalItem;
     private Double totalPrice;
 }
+
+
+
+
+
