@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -48,13 +49,21 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(OrderStatus.PENDING);
         
         Address address = req.getDeliveryAddress();
-        Address savedAddress = addressRepository.save(address);
         
-        if (!user.getAddresses().contains(savedAddress)) {
-            user.getAddresses().add(savedAddress);
+        Address finalAddress = address;
+        Optional<Address> existingAddress = user.getAddresses().stream()
+                                                .filter(addr -> addr.equals(finalAddress))
+                                                .findFirst();
+        
+        if (existingAddress.isPresent()) {
+            address = addressRepository.findById(existingAddress.get().getId()).orElse(address);
+        } else {
+            user.getAddresses().add(address);
             userRepository.save(user);
+            addressRepository.save(address);
         }
-        order.setDeliveryAddress(savedAddress);
+        
+        order.setDeliveryAddress(address);
         
         Restaurant restaurant = restaurantService.findById(req.getRestaurantId())
                                                  .orElseThrow(() -> new Exception("Restaurant with id " +
