@@ -18,6 +18,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: food_delivery_db_2
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -27,13 +38,20 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Wait for MySQL to start
+      run: |
+        until mysqladmin ping -h127.0.0.1 --silent; do
+          echo "Waiting for database connection..."
+          sleep 5
+        done
+
     - name: Set up Environment Variables
       env:
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
-        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+        MYSQL_HOST: localhost
       run: echo "Environment variables are set."
 
     - name: Build with Maven
