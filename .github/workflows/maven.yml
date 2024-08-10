@@ -26,6 +26,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
+    - name: Set up Environment Variables
+      env:
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+      run: echo "Environment variables are set."
+
     - name: Build with Maven
       run: mvn clean install
 
