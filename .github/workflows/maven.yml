@@ -37,3 +37,4 @@ jobs:
         with:
           name: build-artifacts
           path: target/*.jar  # Adjust this to match your project's output
+
