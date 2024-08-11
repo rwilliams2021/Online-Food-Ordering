@@ -21,15 +21,9 @@ jobs:
           MYSQL_PASSWORD: testpassword
         ports:
           - 3306:3306
-        options: >
-          --health-cmd="mysqladmin ping --silent" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -37,28 +31,18 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Wait for MySQL to be ready
+      - name: Wait for MySQL to start
         run: |
-          echo "Waiting for MySQL to be ready..."
-          while ! docker inspect --format='{{.State.Health.Status}}' $(docker-compose ps -q mysql) | grep healthy; do
-            echo "Waiting for MySQL service to be healthy..."
-            sleep 5
+          until mysqladmin ping -h127.0.0.1 --silent; do
+          echo "Waiting for database connection..."
+          sleep 5
           done
-          echo "MySQL is ready."
 
       - name: Set up Environment Variables
         env:
           SPRING_PROFILES_ACTIVE: ci
-          DB_USERNAME: testusername
-          DB_PASSWORD: testpassword
           MYSQL_HOST: 127.0.0.1
         run: echo "Environment variables are set."
-
-      - name: Debug Environment Variables
-        run: |
-          echo "DB_USERNAME=${{ env.DB_USERNAME }}"
-          echo "DB_PASSWORD=${{ env.DB_PASSWORD }}"
-          echo "MYSQL_HOST=${{ env.MYSQL_HOST }}"
 
       - name: Build with Maven
         run: mvn clean install
