@@ -28,11 +28,6 @@ jobs:
           MYSQL_DATABASE: testdb
           MYSQL_USER: testuser
           MYSQL_PASSWORD: testpassword
-        options: >-
-          --health-cmd "mysqladmin ping --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
 
     steps:
     - uses: actions/checkout@v4
@@ -47,7 +42,7 @@ jobs:
       run: |
         until mysqladmin ping -h "localhost" --silent; do
           echo 'waiting for mysql...'
-          sleep 3
+          sleep 5
         done
       env:
         MYSQL_ROOT_PASSWORD: root
