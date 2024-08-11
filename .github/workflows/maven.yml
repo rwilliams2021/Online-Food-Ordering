@@ -21,13 +21,13 @@ jobs:
     services:
       mysql:
         image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: testusername
+          MYSQL_PASSWORD: testpassword
         ports:
           - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: testdb
-          MYSQL_USER: testuser
-          MYSQL_PASSWORD: testpassword
 
     steps:
     - uses: actions/checkout@v4
@@ -38,21 +38,22 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Wait for MySQL
+    - name: Wait for MySQL to start
       run: |
-        until mysqladmin ping -h "localhost" --silent; do
-          echo 'waiting for mysql...'
+        until mysqladmin ping -h127.0.0.1 --silent; do
+          echo "Waiting for database connection..."
           sleep 5
         done
+
+    - name: Set up Environment Variables
       env:
-        MYSQL_ROOT_PASSWORD: root
+        DB_USERNAME: testusername
+        DB_PASSWORD: testpassword
+        MYSQL_HOST: 127.0.0.1
+      run: echo "Environment variables are set."
 
     - name: Build with Maven
       run: mvn clean install
-      env:
-        SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/testdb
-        SPRING_DATASOURCE_USERNAME: testuser
-        SPRING_DATASOURCE_PASSWORD: testpassword
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
