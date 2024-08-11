@@ -52,6 +52,12 @@ jobs:
         MYSQL_HOST: 127.0.0.1
       run: echo "Environment variables are set."
 
+    - name: Debug Environment Variables
+      run: |
+        echo "DB_USERNAME=${{ env.DB_USERNAME }}"
+        echo "DB_PASSWORD=${{ env.DB_PASSWORD }}"
+        echo "MYSQL_HOST=${{ env.MYSQL_HOST }}"
+
     - name: Build with Maven
       run: mvn clean install
 
