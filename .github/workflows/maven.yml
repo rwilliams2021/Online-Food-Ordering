@@ -1,12 +1,10 @@
-name: Maven Build
+name: Project cicd-flow
 
 on:
   push:
-    branches:
-      - main  # Triggers on push to the 'main' branch
+    branches: [ "master" ]
   pull_request:
-    branches:
-      - main  # Triggers on pull requests to the 'main' branch
+    branches: [ "master" ]
 
 jobs:
   build:
