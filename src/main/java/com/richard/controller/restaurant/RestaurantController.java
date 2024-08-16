@@ -57,8 +57,7 @@ public class RestaurantController {
         
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         restaurantService.deleteAllFavourites(user);
-        MessageResponse messageResponse = new MessageResponse();
-        messageResponse.setMessage("Favourites cleared successfully");
+        MessageResponse messageResponse = new MessageResponse("Favourites cleared successfully");
         return ResponseEntity.ok(messageResponse);
     }
     

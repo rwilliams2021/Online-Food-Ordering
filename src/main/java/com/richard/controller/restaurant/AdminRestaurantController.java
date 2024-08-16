@@ -52,8 +52,7 @@ public class AdminRestaurantController {
         
         User user = userService.findUserByJwtToken(jwt).orElseThrow(() -> new Exception("User not found"));
         restaurantService.deleteRestaurant(id);
-        MessageResponse messageResponse = new MessageResponse();
-        messageResponse.setMessage("Restaurant deleted successfully");
+        MessageResponse messageResponse = new MessageResponse("Restaurant deleted successfully");
         return ResponseEntity.ok(messageResponse);
     }
     
