@@ -17,9 +17,13 @@ jobs:
           echo "${{ secrets.GCP_SSH_KEY }}" > private-key.pem
           chmod 600 private-key.pem
 
+      - name: Ensure the target directory exists on GCP VM
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} "mkdir -p /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_db"
+
       - name: Copy project files to GCP VM
         run: |
-          scp -o StrictHostKeyChecking=no -i private-key.pem -r ./ ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_db
+          scp -o StrictHostKeyChecking=no -i private-key.pem -r * ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_db
 
       - name: SSH into GCP VM and build Docker image
         run: |
