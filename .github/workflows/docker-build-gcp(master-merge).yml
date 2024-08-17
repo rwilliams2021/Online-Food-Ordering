@@ -19,17 +19,17 @@ jobs:
 
       - name: Ensure the target directory exists on GCP VM
         run: |
-          ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} "mkdir -p /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_db"
+          ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} "mkdir -p /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_app"
 
       - name: Copy project files to GCP VM
         run: |
-          scp -o StrictHostKeyChecking=no -i private-key.pem -r * ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_db
+          scp -o StrictHostKeyChecking=no -i private-key.pem -r * ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_app
 
       - name: SSH into GCP VM and build Docker image
         run: |
           ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} << 'EOF'
-            cd /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_db
-            mvn clean package
+            cd /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_app
+            mvn clean package -DskipTests -Dspring.profiles.active=ci
             docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/Online-Food-Ordering:latest .
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker push ${{ secrets.DOCKERHUB_USERNAME }}/Online-Food-Ordering:latest
