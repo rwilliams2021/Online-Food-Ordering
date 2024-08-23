@@ -30,9 +30,4 @@ jobs:
       - name: Install dependencies and run tests
         run: mvn clean install -Dspring.profiles.active=ci
 
-      - name: Archive the build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: target/*.jar  # Adjust this to match your project's output
 
