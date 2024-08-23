@@ -20,6 +20,10 @@ FROM eclipse-temurin:17-jdk-alpine
 # Set the working directory in the container
 WORKDIR /app
 
+# Create a non-root user and switch to it
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
 # Copy the jar file from the build stage
 COPY --from=build /app/target/Online-Food-Ordering-0.0.1-SNAPSHOT.jar /app/Online-Food-Ordering.jar
 
