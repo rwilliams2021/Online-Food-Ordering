@@ -29,9 +29,16 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
 
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.GCP_SSH_KEY }}" > private-key.pem
+          chmod 600 private-key.pem
+
       - name: SSH into GCP VM and Deploy
         run: |
           ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} << 'EOF'
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
-            docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
+            docker stop online-food-ordering || true
+            docker rm online-food-ordering || true
+            docker run -d -p 8080:8080 --name online-food-ordering ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
           EOF
