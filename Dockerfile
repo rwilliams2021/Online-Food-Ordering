@@ -25,7 +25,8 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
 # Copy the jar file from the build stage
-COPY --from=build /app/target/Online-Food-Ordering-0.0.1-SNAPSHOT.jar /app/Online-Food-Ordering.jar
+ARG JAR_FILE
+COPY --from=build /app/${JAR_FILE} /app/Online-Food-Ordering.jar
 
 # Expose the port the application runs on
 EXPOSE 8080
