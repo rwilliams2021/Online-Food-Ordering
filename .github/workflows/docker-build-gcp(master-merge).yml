@@ -1,4 +1,4 @@
-name: Build and Push Docker Image on GCP VM
+name: Build and Push Docker Image
 
 on:
   push:
@@ -12,25 +12,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH key
-        run: |
-          echo "${{ secrets.GCP_SSH_KEY }}" > private-key.pem
-          chmod 600 private-key.pem
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Ensure the target directory exists on GCP VM
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} "mkdir -p /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_app"
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Copy project files to GCP VM
+      - name: Build Docker Image
         run: |
-          scp -o StrictHostKeyChecking=no -i private-key.pem -r * ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_app
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest .
 
-      - name: SSH into GCP VM and build Docker image
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
+
+      - name: SSH into GCP VM and Deploy
         run: |
           ssh -o StrictHostKeyChecking=no -i private-key.pem ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} << 'EOF'
-            cd /home/${{ secrets.GCP_VM_USERNAME }}/food_delivery_app
-            mvn clean package -DskipTests -Dspring.profiles.active=ci
-            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest .
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker push ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
+            docker run -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/online-food-ordering:latest
           EOF
