@@ -1,4 +1,4 @@
-name: Project cicd-flow
+name: Master Pull Request CI Pipeline
 
 on:
   push:
