@@ -47,7 +47,8 @@ public class AuthController {
     }
     
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
+    public ResponseEntity<AuthResponse> createUserHandler(
+            @RequestBody User user) throws Exception {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new Exception("Email is already used by another account.");
         }
@@ -63,7 +64,14 @@ public class AuthController {
         cart.setCustomer(savedUser);
         cartRepository.save(cart);
         
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+                                                                                    .username(savedUser.getEmail())
+                                                                                    .password(savedUser.getPassword())
+                                                                                    .roles(savedUser.getRole()
+                                                                                                    .name())  // Ensure roles are correctly set here
+                                                                                    .build();
+        
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
         String jwt = jwtProvider.generateToken(authentication);
@@ -78,7 +86,8 @@ public class AuthController {
     }
     
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest req) throws Exception {
+    public ResponseEntity<AuthResponse> signIn(
+            @RequestBody LoginRequest req) throws Exception {
         
         String username = req.getEmail();
         String password = req.getPassword();
@@ -92,7 +101,7 @@ public class AuthController {
         authResponse.setMessage("User logged in successfully.");
         
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        String role =  authorities.isEmpty()?null:authorities.iterator().next().getAuthority();
+        String role = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
         authResponse.setRole(UserRole.valueOf(role));
         
         User user = userRepository.findByEmail(username).orElseThrow(() -> new Exception("User not found."));
