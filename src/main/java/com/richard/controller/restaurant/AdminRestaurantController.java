@@ -8,12 +8,14 @@ import com.richard.service.RestaurantService;
 import com.richard.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin/restaurant")
+@PreAuthorize("hasAnyRole('ADMIN', 'RESTAURANT_OWNER')")
 public class AdminRestaurantController {
     
     private final RestaurantService restaurantService;
