@@ -1,0 +1,20 @@
+spring:
+  config:
+    import: optional:classpath:Online-Food-Ordering.properties
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/foodappdb'
+    username: user
+    password: password
+  jpa:
+  # show-sql: true
+
+jwt:
+  secret:
+    key: '${JWT_SECRET_KEY}'
+stripe:
+  api:
+    key: '${STRIPE_API_KEY}'
+
+logging:
+  level:
+    org.springframework.security: DEBUG
