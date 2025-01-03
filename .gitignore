@@ -32,5 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-# Ignore application-dev.yml
-/application-dev.properties
+/src/main/resources/Online-Food-Ordering.properties
