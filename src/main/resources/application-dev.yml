@@ -17,4 +17,5 @@ stripe:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE

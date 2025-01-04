@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
@@ -33,6 +34,14 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws
                                                                                                                        ServletException,
                                                                                                                        IOException {
+        
+        // Skip validation for public endpoints
+        if (SecurityConstants.PUBLIC_ENDPOINTS.stream()
+                                              .anyMatch(pattern -> new AntPathMatcher().match(pattern, request.getServletPath()))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String jwt = request.getHeader(JwtConstant.JWT_HEADER);
         
         if (jwt != null && jwt.startsWith(JwtConstant.JWT_PREFIX)) {

@@ -1,5 +1,5 @@
 services:
-  db:
+  online-food-ordering-db:
     image: mysql:8.0
     restart: always
     environment:
