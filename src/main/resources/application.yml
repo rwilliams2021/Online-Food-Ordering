@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Online-Food-Ordering
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+springdoc:
+  api-docs:
+    path: /openapi-schema

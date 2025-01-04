@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/restaurant")
+@RequestMapping("api/v1/admin/restaurant")
 @PreAuthorize("hasAnyRole('ADMIN', 'RESTAURANT_OWNER')")
 public class AdminRestaurantController {
     

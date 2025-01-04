@@ -25,35 +25,25 @@ import java.util.List;
 public class AppConfig {
     
     private final String jwtSecretKey;
-    private final String servletContextPath;
     
-    public AppConfig(
-            @Value("${jwt.secret.key}") String jwtSecretKey,
-            @Value("${server.servlet.context-path}") String servletContextPath) {
+    public AppConfig(@Value("${jwt.secret.key}") String jwtSecretKey) {
         this.jwtSecretKey = jwtSecretKey;
-        this.servletContextPath = servletContextPath;
     }
     
-    /**
-     * Configures the security filter chain for the application.
-     *
-     * @param http the HttpSecurity object to configure
-     * @return the SecurityFilterChain object
-     * @throws Exception if an error occurs during configuration
-     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorize -> authorize.requestMatchers(servletContextPath + "/admin/**")
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize.requestMatchers(SecurityConstants.PUBLIC_ENDPOINTS.toArray(String[]::new))
+                                                         .permitAll()
+                                                         .requestMatchers("/admin/**")
                                                          .hasAnyRole("RESTAURANT_OWNER", "ADMIN")
-                                                         .requestMatchers(servletContextPath + "/**")
+                                                         .requestMatchers("/**")
                                                          .authenticated()
                                                          .anyRequest()
                                                          .permitAll())
-            .addFilterBefore(new JwtTokenValidator(jwtSecretKey), BasicAuthenticationFilter.class)
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+            .addFilterBefore(new JwtTokenValidator(jwtSecretKey), BasicAuthenticationFilter.class);
         
         return http.build();
     }
@@ -67,7 +57,7 @@ public class AppConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5175", "http://localhost:8080"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setExposedHeaders(Collections.singletonList("Authorization"));

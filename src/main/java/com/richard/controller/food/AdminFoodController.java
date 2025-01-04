@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/food")
+@RequestMapping("api/v1/admin/food")
 public class AdminFoodController {
     
     private final FoodService foodService;
