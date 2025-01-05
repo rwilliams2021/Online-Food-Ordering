@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM amazoncorretto:17-alpine3.18
 
 # Set the working directory in the container
 WORKDIR /app
