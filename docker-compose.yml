@@ -1,7 +1,6 @@
 services:
   backend:
-    build: .
-    image: online-food-ordering
+    image: rwilliams2021/online-food-ordering:latest
     container_name: online-food-ordering-backend
     ports:
       - "8080:8080"
